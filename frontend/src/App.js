@@ -25,6 +25,7 @@ function App() {
     return () => unsubscribe();
   }, []);
 
+  
   return (
     <Router>
       {userEmail && <Navbar />}
