@@ -8,7 +8,7 @@ const app = express();
 const port = 5000;
 const Razorpay = require('razorpay');
 
-app.use(cors({origin:'https://artogrampec.vercel.app/'}));
+app.use(cors('https://artogrampec.vercel.app/'));
 app.use(bodyParser.json());
 const dburi = process.env.dbURI;
 mongoose.connect(dburi, {
@@ -141,5 +141,5 @@ app.post('/generate-payment-link', async (req, res) => {
 
 
 app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+  console.log(`Server is running on ${port}`);
 });

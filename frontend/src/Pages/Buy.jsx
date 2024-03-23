@@ -3,7 +3,7 @@ import Nav from '../components/Navbar';
 import Spinner from '../components/Spinner';
 import { useNavigate } from 'react-router-dom';
 
-const Buy = () => {
+const Buy = () => { 
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
