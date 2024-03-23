@@ -1,36 +1,129 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React,{useEffect} from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { initializeApp } from "firebase/app";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "firebase/auth";
 
 const Signup = () => {
-  const [admin, setAdmin] = useState('');
-  const [password, setPassword] = useState('');
-  const navigate = useNavigate();
+  const[useremail, setUserEmail] = useState('');
+  const [user, setUser] = useState(null);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-  const handleAdminChange = (e) => {
-    setAdmin(e.target.value);
+  const [nameError, setNameError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
+
+  const navigation = useNavigate();
+  const firebaseConfig = {
+    apiKey: "AIzaSyAJj9GuKhTUsaUrsQPma2w-297iVzcYsxM",
+    authDomain: "artogram-7af74.firebaseapp.com",
+    projectId: "artogram-7af74",
+    storageBucket: "artogram-7af74.appspot.com",
+    messagingSenderId: "408075607858",
+    appId: "1:408075607858:web:691180574cf2b506e6c12b",
+    measurementId: "G-GB8DNH9J5Y"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+        if (user) {
+            setUser(user);
+            setUserEmail(user.email);
+        }
+    });
+    return () => unsubscribe();
+}, [auth, setUserEmail]);
+
+const connectWallet = async () => {
+    try {
+        const provider = new GoogleAuthProvider();
+        const result = await signInWithPopup(auth, provider);
+        setUser(result.user);
+        setUserEmail(result.user.email);
+        window.location.href = '/';
+        console.log(result);
+    } catch (error) {
+        console.error('Google authentication error:', error.message);
+    }
+};
+
+const disconnectWallet = async () => {
+    try {
+        await signOut(auth);
+        setUser(null);
+        setUserEmail(null);
+    } catch (error) {
+        console.error('Logout error:', error.message);
+    }
+};
+
+
+  const validation = () => {
+    if (name === "") {
+      setNameError("Name cannot be Empty");
+      return false;
+    }
+
+    var emailpattern = /^[^\s@]+\@+[^\s@]+\.[^\s@]+$/;
+    if (!emailpattern.test(email)) {
+      setEmailError("Invalid Email Address");
+      return false;
+    }
+
+    if (password.length < 8) {
+      setPasswordError("Password must be at least 8 characters");
+      return false;
+    }
+
+    if (password !== confirmPassword) {
+      setConfirmPasswordError("Password Do Not Match");
+      return false;
+    }
+
+    return (
+      name !== "" &&
+      emailpattern.test(email) &&
+      password.length >= 8 &&
+      password === confirmPassword
+    );
   };
 
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
+  const handleSignup = async () => {
+    console.log('button clicked')
+
+    if (validation()) {
+      setNameError("");
+      setEmailError("");
+      setPasswordError("");
+      setConfirmPasswordError("");
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
-      const response = await fetch('http://localhost:5000/api/register', {
+      const response = await fetch(' http://localhost:5000/api/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ admin, password })
+        body: JSON.stringify({ name, email, password })
       });
+      console.log(response);
       const data = await response.json();
-  
+
       if (response.ok) {
         console.log(data.message);
         window.localStorage.setItem('authenticated', true);
-        window.location.href='/login'
+        window.location.href = '/login'
       } else {
         alert('Authentication failed. Please check your credentials.');
       }
@@ -41,35 +134,43 @@ const Signup = () => {
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen flex items-center justify-center">
-      <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
-        <h2 className="text-2xl mb-4 text-center font-bold">Admin Login</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label htmlFor="admin" className="block text-gray-700">Admin:</label>
-            <input
-              type="text"
-              id="admin"
-              value={admin}
-              onChange={handleAdminChange}
-              className="form-input border-2 rounded border-gray-400 mt-1 block w-full"
-            />
+    <div id="signup" className='px-96 py-10 pt-24 bg-gray-300'>
+      <div className='border-2 bg-blue-200 py-5 mx-36 rounded-3xl border-black shadow-lg shadow-black '>
+        <h1 className="flex justify-center font-bold text-4xl pt-16">SIGNUP</h1>
+        <form onSubmit={handleSignup}>
+
+          <div className="flex justify-center pt-10">
+            <input id="name" className="border-2 border-black rounded-xl pl-4 h-10 w-96" type="text" placeholder="Name" required onChange={(e) => setName(e.target.value)} />
           </div>
-          <div className="mb-4">
-            <label htmlFor="password" className="block text-gray-700">Password:</label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={handlePasswordChange}
-              className="form-input border-2 rounded border-gray-400  mt-1 block w-full"
-            />
+          <p className="text-red-800 flex justify-center">{nameError}</p>
+          <div className="flex justify-center pt-10">
+            <input id="email" className="border-2 border-black rounded-xl pl-4 h-10 w-96" type="email" placeholder="Email" required onChange={(e) => setEmail(e.target.value)} />
           </div>
-          <button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded w-full">Login</button>
+          <p className="text-red-800 flex justify-center">{emailError}</p>
+          <div className="flex justify-center pt-10 ">
+            <input id="password" className="border-2 border-black rounded-xl pl-4 h-10 w-96" type="password" placeholder="Create Password" required onChange={(e) => setPassword(e.target.value)} />
+          </div>
+          <p className="text-red-800 flex justify-center">{passwordError}</p>
+          <div className="flex justify-center pt-10">
+            <input id="confirmpassword" className="border-2 border-black rounded-xl pl-4 h-10 w-96" type="password" placeholder="confrim Password" required onChange={(e) => setConfirmPassword(e.target.value)} />
+          </div>
+          <p className="text-red-800 flex justify-center">{confirmPasswordError}</p>
+          <div className="flex justify-center pt-10 pb-2 ">
+            <button type="button" className="bg-blue-500 hover:bg-blue-600 p-2 rounded-2xl" onClick={handleSubmit}>Signup</button>
+          </div>
+          <hr className="border-1 mx-16 border-black" />
+          <div className='flex justify-center pt-4 pb-2'>
+            {user ? (
+                <button className='bg-red-500 hover:bg-red-600 items-center text-black  p-2 font-semibold rounded-xl' onClick={disconnectWallet}>Logout</button>
+            ) : (
+                <button className='bg-red-500 hover:bg-600 items-center text-black p-2 rounded-xl font-semibold' onClick={connectWallet}>Sign Up with Google</button>
+            )}
+        </div>
+          <div className="flex justify-center capitalize pt-2 pb-2 font-semibold">Don't have an account? <a href="/login" className="hover:text-blue-500">Login</a></div>
         </form>
       </div>
     </div>
-  );
-};
+  )
+}
 
 export default Signup;

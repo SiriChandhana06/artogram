@@ -1,75 +1,73 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const Auth = () => {
-  const [admin, setAdmin] = useState('');
-  const [password, setPassword] = useState('');
+function Loginpage() {
   const navigate = useNavigate();
-
-  const handleAdminChange = (e) => {
-    setAdmin(e.target.value);
-  };
-
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  };
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
-      const response = await fetch('api/login', {
+      const response = await fetch('http://localhost:5000/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ admin, password })
+        body: JSON.stringify({ email, password })
       });
-      const data = await response.json();
-  
-      if (response.ok) {
+      console.log(response);
+      
+      if (response.ok) {  
+        const data = await response.json();
         console.log(data.message);
         window.localStorage.setItem('authenticated', true);
-        window.location.href='./admin'
+        navigate('/');
       } else {
-        alert('Authentication failed. Please check your credentials.');
+        setError('Authentication failed. Please check your credentials.');
       }
     } catch (error) {
       console.error('Error logging in:', error);
-      alert('Error logging in. Please try again.');
+      setError('Error logging in. Please try again.');
     }
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen flex items-center justify-center">
-      <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
-        <h2 className="text-2xl mb-4 text-center font-bold">Admin Login</h2>
+    <div id="loginpage" className="px-96 py-16 bg-gray-300 h-screen">
+      <div className="border-2 bg-blue-200 py-5 mx-36 rounded-3xl border-black shadow-lg shadow-black">
+        <h1 className="flex justify-center font-bold text-4xl pt-10">LOGIN</h1>
         <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label htmlFor="admin" className="block text-gray-700">Admin:</label>
+          <div id="1username" className="flex justify-center pt-16">
             <input
+              className="border-2 border-black rounded-xl pl-4 h-10 w-96"
               type="text"
-              id="admin"
-              value={admin}
-              onChange={handleAdminChange}
-              className="form-input border-2 rounded border-gray-400 mt-1 block w-full"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
-          <div className="mb-4">
-            <label htmlFor="password" className="block text-gray-700">Password:</label>
+          <div id="1password" className="flex justify-center pt-16">
             <input
+              className="border-2 border-black rounded-xl pl-4 h-10 w-96"
               type="password"
-              id="password"
+              placeholder="Password"
               value={password}
-              onChange={handlePasswordChange}
-              className="form-input border-2 rounded border-gray-400  mt-1 block w-full"
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded w-full">Login</button>
+          <div className="flex justify-center pt-12 pb-2">
+            <button className="bg-blue-500 hover:bg-blue-600 p-2 rounded-2xl">Login</button>
+          </div>
+          {error && <p className="flex justify-center text-red-800">{error}</p>}
+          <div className="flex justify-center capitalize text-lg pt-4 pb-20 font-semibold">
+            Don't have an account? <a href="/signup" className="hover:text-blue-500">Signup</a>
+          </div>
         </form>
       </div>
     </div>
   );
-};
+}
 
-export default Auth;
+export default Loginpage;
