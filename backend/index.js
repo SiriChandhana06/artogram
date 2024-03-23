@@ -46,6 +46,10 @@ const razorpay = new Razorpay({
   key_secret: process.env.keysecret
 });
 
+app.get("/", async (req, res) => {
+  res.json({ message: "API's are working!" });
+})
+
 app.post('/api/register', async (req, res) => {
   const { name, email, password } = req.body;
   try {
