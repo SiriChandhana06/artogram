@@ -156,24 +156,15 @@ app.post('/api/posts/email', async (req, res) => {
   }
 });
 
-app.delete('/api/posts/:postId', async (req, res) => {
-  const postId = req.params.postId;
-  const userEmail = req.body.userEmail; // Get the userEmail from the request body
+app.delete('/api/posts/delete', async (req, res) => {
+  const { _id } = req.body;
 
   try {
-      // Check if the post exists
-      const post = await Product.findById(postId);
+      const post = await Product.findById(_id);
       if (!post) {
           return res.status(404).json({ error: 'Post not found' });
       }
-
-      // Check if the authenticated user owns the post
-      if (post.userEmail !== userEmail) {
-          return res.status(403).json({ error: 'Unauthorized' });
-      }
-
-      // Delete the post
-      await Product.findByIdAndDelete(postId);
+      await Product.findByIdAndDelete(_id);
 
       res.json({ message: 'Post deleted successfully' });
   } catch (error) {
@@ -181,6 +172,8 @@ app.delete('/api/posts/:postId', async (req, res) => {
       res.status(500).json({ error: 'Failed to delete post' });
   }
 });
+
+
 
 
 app.listen(port, () => {

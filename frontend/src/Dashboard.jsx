@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { ObjectId } from 'bson';
 
 const Dashboard = () => {
     const [myPosts, setMyPosts] = useState([]);
@@ -34,28 +35,29 @@ const Dashboard = () => {
                         setMyPosts(data.posts);
                     } else {
                         console.error('Failed to fetch posts for the current user');
-                        // Handle error
                     }
                 }
             } catch (error) {
                 console.error('Error fetching posts:', error);
-                // Handle error
             }
         };
 
         fetchPosts();
     }, [userEmail]);
 
-    const handleDeletePost = async (postId, userEmail) => {
+    const handleDeletePost = async (_id) => {
+        console.log(_id + " - " + userEmail);
         try {
-            const response = await fetch(`http://localhost:5000/api/posts/${postId}`, {
+            const response = await fetch('http://localhost:5000/api/posts/delete', {
                 method: 'DELETE',
                 headers: {
+                    'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ userEmail })
+                body: JSON.stringify({ _id})
             });
+    
             if (response.ok) {
-                setMyPosts(myPosts.filter(post => post._id !== postId));
+                setMyPosts(prevPosts => prevPosts.filter(post => post._id !== _id));
             } else {
                 console.error('Failed to delete post');
             }
@@ -64,13 +66,12 @@ const Dashboard = () => {
         }
     };
     
-
     return (
         <div className='bg-blue-300'>
             <h2 className='pt-24 font-semibold text-4xl text-center'>My Posts</h2>
-            <ul>
+            <ul className=''>
                 {myPosts.map(post => (
-                    <li key={post._id} className='border-2 p-3 border-black transform transition-transform duration-300 hover:scale-105 hover:border-gray-600 rounded-3xl shadow-xl shadow-black m-10 h-5/7 w-96'>
+                    <li key={post._id} className='border-2 p-3 bg-blue-300 border-black transform transition-transform duration-300 hover:scale-105 hover:border-gray-600 rounded-3xl shadow-xl shadow-black m-10 h-5/7 w-96'>
                         <div className='w-full p-4 flex justify-center'>
                             <img className='h-60 w-80 rounded-xl' alt='card' src={post.imageUrl} />
                         </div>
