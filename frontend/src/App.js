@@ -10,6 +10,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import Navbar from './components/Navbar';
 import Spinner from './components/Spinner';
 import Dashboard from './Dashboard';
+import Edit from './Pages/Edit';
 
 function App() {
   const [userEmail, setUserEmail] = useState('');
@@ -50,6 +51,7 @@ function App() {
         <Route path='/buy' element={<Buy />} />
         <Route path='/dashboard' element={<Dashboard />} />
         <Route path='/payments' element={<Payment />} />
+        <Route path='/editpost' element={<Edit />} />
         <Route path='*' element={<Navigate to="/" />} />
       </Routes>
     </Router>

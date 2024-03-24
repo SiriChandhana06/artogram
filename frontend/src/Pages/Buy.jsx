@@ -59,7 +59,7 @@ const Buy = () => {
                   <h1 className='font-medium px-4 py-2'>Description:<span className='font-light px-3'>{product.description}</span></h1>
                 </div>
                 <div className='px-4 py-2 font-semibold'>
-                  <button className='bg-green-500 hover:bg-green-600 px-3 py-1 text-xl rounded-xl' onClick={() => handleAddToCart(product)}>Buy</button>
+                  <button className='bg-green-400 hover:bg-green-500 px-3 py-1 text-xl rounded-xl' onClick={() => handleAddToCart(product)}>Buy</button>
                 </div>
               </div>
             </div>

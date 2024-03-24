@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { ObjectId } from 'bson';
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 
 const Dashboard = () => {
     const [myPosts, setMyPosts] = useState([]);
@@ -81,7 +81,10 @@ const Dashboard = () => {
                         <p className='px-4'><strong>Price:</strong> ₹{post.price}</p>
                         <p className='px-4'><strong>Phone Number:</strong> {post.phonenumber}</p>
                         <p className='px-4'><strong>UPI Id:</strong> {post.upiid}</p>
-                        <button className='bg-red-500 text-white px-3 py-1 rounded-md mt-2 ml-4' onClick={() => handleDeletePost(post._id)}>Delete Post</button>
+                        <div className="flex justify-between px-4">
+                            <button className='bg-red-500 text-white px-3 py-1 rounded-md mt-2' onClick={() => handleDeletePost(post._id)}>Delete Post</button>
+                            <Link to='/editpost' className="bg-blue-500 text-white px-3 py-1 rounded-md mt-2">Edit</Link>
+                        </div>
                     </li>
                 ))}
             </ul>
