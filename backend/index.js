@@ -7,6 +7,7 @@ const bcrypt = require('bcrypt');
 const app = express();
 const port = 5000;
 const Razorpay = require('razorpay');
+const admin = require('firebase-admin');
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -23,6 +24,7 @@ db.once('open', () => {
 
 
 const productSchema = new mongoose.Schema({
+  userEmail: String,
   productName: String,
   productType: String,
   imageUrl: String,
@@ -41,6 +43,8 @@ const userSchema = new mongoose.Schema({
   password: String
 });
 const User = mongoose.model('User', userSchema);
+
+
 const razorpay = new Razorpay({
   key_id: process.env.keyid,
   key_secret: process.env.keysecret
@@ -92,8 +96,9 @@ app.post('/api/login', async (req, res) => {
 
 app.post('/api/products', async (req, res) => {
   try {
-    const { productName, productType, imageUrl, price, description, phonenumber, upiid } = req.body;
+    const { userEmail, productName, productType, imageUrl, price, description, phonenumber, upiid } = req.body;
     const product = new Product({
+      userEmail,
       productName,
       productType,
       imageUrl,
@@ -136,6 +141,44 @@ app.post('/generate-payment-link', async (req, res) => {
   } catch (error) {
     console.error('Error generating payment link:', error);
     res.status(500).json({ error: 'Failed to generate payment link' });
+  }
+});
+
+
+app.post('/api/posts/email', async (req, res) => {
+  const { email } = req.body;
+  try {
+    const posts = await Product.find({ userEmail: email });
+    res.json({ posts });
+  } catch (error) {
+    console.error('Error fetching posts:', error);
+    res.status(500).json({ error: 'Failed to fetch posts' });
+  }
+});
+
+app.delete('/api/posts/:postId', async (req, res) => {
+  const postId = req.params.postId;
+  const userEmail = req.body.userEmail; // Get the userEmail from the request body
+
+  try {
+      // Check if the post exists
+      const post = await Product.findById(postId);
+      if (!post) {
+          return res.status(404).json({ error: 'Post not found' });
+      }
+
+      // Check if the authenticated user owns the post
+      if (post.userEmail !== userEmail) {
+          return res.status(403).json({ error: 'Unauthorized' });
+      }
+
+      // Delete the post
+      await Product.findByIdAndDelete(postId);
+
+      res.json({ message: 'Post deleted successfully' });
+  } catch (error) {
+      console.error('Error deleting post:', error);
+      res.status(500).json({ error: 'Failed to delete post' });
   }
 });
 

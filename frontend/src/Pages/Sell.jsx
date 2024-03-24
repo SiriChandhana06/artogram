@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { initializeApp } from "firebase/app";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Navbar from '../components/Navbar';
-import SellPic from '../assets/sell.png'
+import SellPic from '../assets/sell.png';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAJj9GuKhTUsaUrsQPma2w-297iVzcYsxM",
@@ -22,10 +23,24 @@ const Sell = () => {
   const [productType, setProductType] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [upiid, setUPIId] = useState('');
-  const [phonenumber,setPhoneNumber] = useState('');
+  const [phonenumber, setPhoneNumber] = useState('');
   const [image, setImage] = useState(null);
   const [price, setPrice] = useState('');
   const [description, setDescription] = useState('');
+  const [userEmail, setUserEmail] = useState('');
+
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUserEmail(user.email);
+      } else {
+        setUserEmail('');
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -36,27 +51,18 @@ const Sell = () => {
     }
 
     try {
-      const firebaseConfig = {
-        apiKey: "AIzaSyAJj9GuKhTUsaUrsQPma2w-297iVzcYsxM",
-        authDomain: "artogram-7af74.firebaseapp.com",
-        projectId: "artogram-7af74",
-        storageBucket: "artogram-7af74.appspot.com",
-        messagingSenderId: "408075607858",
-        appId: "1:408075607858:web:691180574cf2b506e6c12b",
-        measurementId: "G-GB8DNH9J5Y"
-      };
-      const app = initializeApp(firebaseConfig);
       const storageRef = ref(storage, `productsImages/${image.name}`);
       await uploadBytes(storageRef, image);
-      const url = await getDownloadURL(storageRef);
-      setImageUrl(url);
       const imageUrl = await getDownloadURL(storageRef);
+      setImageUrl(imageUrl);
+
       const response = await fetch('http://localhost:5000/api/products', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          userEmail,
           productName,
           productType,
           imageUrl,
@@ -66,6 +72,7 @@ const Sell = () => {
           upiid
         }),
       });
+
       if (response.ok) {
         alert('Product created successfully');
         setProductName('');
@@ -84,6 +91,7 @@ const Sell = () => {
       alert('Error creating product');
     }
   };
+
   const handleProductTypeChange = (e) => {
     setProductType(e.target.value);
   };
@@ -92,7 +100,6 @@ const Sell = () => {
     const file = e.target.files[0];
     setImage(file);
   };
-
 
   return (
     <div className="bg-blue-300 font-serif">
