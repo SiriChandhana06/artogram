@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getAuth, onAuthStateChanged,signOut } from 'firebase/auth';
+
 
 function Navbar() {
   const navigate = useNavigate();
   const [userEmail, setUserEmail] = useState('');
+  const [showDropdown, setShowDropdown] = useState(false);
 
   useEffect(() => {
     const auth = getAuth(); 
@@ -20,7 +22,22 @@ function Navbar() {
   }, []);
 
   const handleProfileClick = () => {
-    navigate('/profile');
+    setShowDropdown(!showDropdown);   };
+
+  const handleDashboardClick = () => {
+    navigate('/dashboard');
+    setShowDropdown(false); 
+  };
+
+  const handleLogout = () => {
+    const auth = getAuth();
+    signOut(auth)
+      .then(() => {
+        setShowDropdown(false);
+      })
+      .catch((error) => {
+        console.error('Error during logout:', error);
+      });
   };
 
   return (
@@ -32,7 +49,7 @@ function Navbar() {
         <div className='pl-96'>
           <div className='pl-96'>
             <div className='pl-60'>
-              <div className='flex gap-4'>
+              <div className='flex gap-4 relative'>
                 <h3 id='un' className='font-light text-xl pt-6 text-black'>{userEmail || 'Guest'}</h3>
                 <button id='p' className='h-20' onClick={handleProfileClick}>
                   <img
@@ -42,6 +59,22 @@ function Navbar() {
                     src='https://e7.pngegg.com/pngimages/782/114/png-clipart-profile-icon-circled-user-icon-icons-logos-emojis-users-thumbnail.png'
                   />
                 </button>
+                {showDropdown && (
+                  <div className='absolute right-0 mt-16 transition-transform antialiased bg-white rounded-md shadow-lg'>
+                    <ul className='py-1'>
+                      <li>
+                        <button className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100' onClick={handleDashboardClick}>
+                          Dashboard
+                        </button>
+                      </li>
+                      <li>
+                        <button className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100' onClick={handleLogout}>
+                          Logout
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                )}
               </div>
             </div>
           </div>
