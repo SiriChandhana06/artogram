@@ -43,7 +43,6 @@ function App() {
       <Navbar />
       <Routes>
         <Route path='/' element={userEmail ? <Home/> : <Signup/>} />
-        {/* <Route path='/' element={<Home />} /> */}
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<Signup />} />
         <Route path='/sell' element={<Sell />} />
