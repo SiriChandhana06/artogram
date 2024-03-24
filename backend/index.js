@@ -8,7 +8,7 @@ const app = express();
 const port = 5000;
 const Razorpay = require('razorpay');
 
-app.use(cors('https://artogrampec.vercel.app/'));
+app.use(cors());
 app.use(bodyParser.json());
 const dburi = process.env.dbURI;
 mongoose.connect(dburi, {

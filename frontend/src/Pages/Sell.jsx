@@ -51,7 +51,7 @@ const Sell = () => {
       const url = await getDownloadURL(storageRef);
       setImageUrl(url);
       const imageUrl = await getDownloadURL(storageRef);
-      const response = await fetch('https://artogram-backend.vercel.app/api/products', {
+      const response = await fetch('http://localhost:5000/api/products', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

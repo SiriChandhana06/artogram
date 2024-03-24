@@ -1,6 +1,5 @@
 import React,{useEffect} from "react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "firebase/auth";
 
@@ -16,8 +15,6 @@ const Signup = () => {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
-
-  const navigation = useNavigate();
   const firebaseConfig = {
     apiKey: "AIzaSyAJj9GuKhTUsaUrsQPma2w-297iVzcYsxM",
     authDomain: "artogram-7af74.firebaseapp.com",
@@ -110,7 +107,7 @@ const disconnectWallet = async () => {
     e.preventDefault();
 
     try {
-      const response = await fetch(' https://artogram-backend.vercel.app/api/register', {
+      const response = await fetch(' http://localhost:5000/api/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
