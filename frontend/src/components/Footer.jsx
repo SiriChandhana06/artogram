@@ -2,7 +2,7 @@ import React from 'react'
 
 const Footer = () => {
   return (
-    <div className='bg-gray-900 md:flex  gap-96'>
+    <div className='bg-gray-900 md:flex gap-96'>
       <div>
         <h1 className='text-white text-2xl md:pl-10 px-5 font-bold py-4 '>Artogram</h1>
       </div>

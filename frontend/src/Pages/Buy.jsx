@@ -33,9 +33,8 @@ const Buy = () => {
   };
 
   return (
-    <div className='bg-blue-300 pb-10'>
-      <Nav />
-      <div className="pt-24 grid grid-cols-1 md:grid-cols-3">
+    <div className='bg-blue-300'>
+      <div className="pt-24 grid grid-cols-1 md:grid-cols-3 pb-10">
         {loading ? ( 
           <Spinner />
         ) : (

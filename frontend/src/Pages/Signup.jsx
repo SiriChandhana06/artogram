@@ -1,10 +1,11 @@
-import React,{useEffect} from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "firebase/auth";
+import Footer from '../components/Footer';
 
 const Signup = () => {
-  const[useremail, setUserEmail] = useState('');
+  const [useremail, setUserEmail] = useState('');
   const [user, setUser] = useState(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -23,43 +24,43 @@ const Signup = () => {
     messagingSenderId: "408075607858",
     appId: "1:408075607858:web:691180574cf2b506e6c12b",
     measurementId: "G-GB8DNH9J5Y"
-};
+  };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
 
-useEffect(() => {
+  useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-        if (user) {
-            setUser(user);
-            setUserEmail(user.email);
-        }
+      if (user) {
+        setUser(user);
+        setUserEmail(user.email);
+      }
     });
     return () => unsubscribe();
-}, [auth, setUserEmail]);
+  }, [auth, setUserEmail]);
 
-const connectWallet = async () => {
+  const connectWallet = async () => {
     try {
-        const provider = new GoogleAuthProvider();
-        const result = await signInWithPopup(auth, provider);
-        setUser(result.user);
-        setUserEmail(result.user.email);
-        window.location.href = '/';
-        console.log(result);
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      setUser(result.user);
+      setUserEmail(result.user.email);
+      window.location.href = '/';
+      console.log(result);
     } catch (error) {
-        console.error('Google authentication error:', error.message);
+      console.error('Google authentication error:', error.message);
     }
-};
+  };
 
-const disconnectWallet = async () => {
+  const disconnectWallet = async () => {
     try {
-        await signOut(auth);
-        setUser(null);
-        setUserEmail(null);
+      await signOut(auth);
+      setUser(null);
+      setUserEmail(null);
     } catch (error) {
-        console.error('Logout error:', error.message);
+      console.error('Logout error:', error.message);
     }
-};
+  };
 
 
   const validation = () => {
@@ -131,41 +132,45 @@ const disconnectWallet = async () => {
   };
 
   return (
-    <div id="signup" className='md:px-96 py-10 pt-24 bg-gray-300'>
-      <div className='border-2 bg-blue-200 py-5 mx-36 rounded-3xl border-black shadow-lg shadow-black '>
-        <h1 className="flex justify-center font-bold text-4xl pt-16">SIGNUP</h1>
-        <form onSubmit={handleSignup}>
+    <div>
 
-          <div className="flex justify-center pt-10">
-            <input id="name" className="border-2 border-black rounded-xl pl-4 h-10 w-96" type="text" placeholder="Name" required onChange={(e) => setName(e.target.value)} />
-          </div>
-          <p className="text-red-800 flex justify-center">{nameError}</p>
-          <div className="flex justify-center pt-10">
-            <input id="email" className="border-2 border-black rounded-xl pl-4 h-10 w-96" type="email" placeholder="Email" required onChange={(e) => setEmail(e.target.value)} />
-          </div>
-          <p className="text-red-800 flex justify-center">{emailError}</p>
-          <div className="flex justify-center pt-10 ">
-            <input id="password" className="border-2 border-black rounded-xl pl-4 h-10 w-96" type="password" placeholder="Create Password" required onChange={(e) => setPassword(e.target.value)} />
-          </div>
-          <p className="text-red-800 flex justify-center">{passwordError}</p>
-          <div className="flex justify-center pt-10">
-            <input id="confirmpassword" className="border-2 border-black rounded-xl pl-4 h-10 w-96" type="password" placeholder="confrim Password" required onChange={(e) => setConfirmPassword(e.target.value)} />
-          </div>
-          <p className="text-red-800 flex justify-center">{confirmPasswordError}</p>
-          <div className="flex justify-center pt-10 pb-2 ">
-            <button type="button" className="bg-blue-500 hover:bg-blue-600 p-2 rounded-2xl" onClick={handleSubmit}>Signup</button>
-          </div>
-          <hr className="border-1 mx-16 border-black" />
-          <div className='flex justify-center pt-4 pb-2'>
-            {user ? (
+      <div id="signup" className='md:px-96 py-10 pt-24 bg-gray-300'>
+        <div className='border-2 bg-blue-200 py-5 mx-5 rounded-3xl border-black shadow-lg shadow-black '>
+          <h1 className="flex justify-center font-bold text-xl md:text-4xl pt-16">SIGNUP</h1>
+          <form onSubmit={handleSignup} className="p-5">
+
+            <div className="flex justify-center pt-10">
+              <input id="name" className="border-2 border-black rounded-xl pl-4 h-10 md:w-96 w-80" type="text" placeholder="Name" required onChange={(e) => setName(e.target.value)} />
+            </div>
+            <p className="text-red-800 flex justify-center">{nameError}</p>
+            <div className="flex justify-center pt-10">
+              <input id="email" className="border-2 border-black rounded-xl pl-4 h-10 md:w-96 w-80" type="email" placeholder="Email" required onChange={(e) => setEmail(e.target.value)} />
+            </div>
+            <p className="text-red-800 flex justify-center">{emailError}</p>
+            <div className="flex justify-center pt-10 ">
+              <input id="password" className="border-2 border-black rounded-xl pl-4 h-10 md:w-96 w-80" type="password" placeholder="Create Password" required onChange={(e) => setPassword(e.target.value)} />
+            </div>
+            <p className="text-red-800 flex justify-center">{passwordError}</p>
+            <div className="flex justify-center pt-10">
+              <input id="confirmpassword" className="border-2 border-black rounded-xl pl-4 h-10 md:w-96 w-80" type="password" placeholder="confrim Password" required onChange={(e) => setConfirmPassword(e.target.value)} />
+            </div>
+            <p className="text-red-800 flex justify-center">{confirmPasswordError}</p>
+            <div className="flex justify-center pt-10 pb-2 ">
+              <button type="button" className="bg-blue-500 hover:bg-blue-600 p-2 rounded-2xl" onClick={handleSubmit}>Signup</button>
+            </div>
+            <hr className="border-1 mx-16 border-black" />
+            <div className='flex justify-center pt-4 pb-2'>
+              {user ? (
                 <button className='bg-red-500 hover:bg-red-600 items-center text-black  p-2 font-semibold rounded-xl' onClick={disconnectWallet}>Logout</button>
-            ) : (
+              ) : (
                 <button className='bg-red-500 hover:bg-600 items-center text-black p-2 rounded-xl font-semibold' onClick={connectWallet}>Sign Up with Google</button>
-            )}
+              )}
+            </div>
+            <div className="flex justify-center capitalize pt-2 pb-2 font-semibold">Don't have an account? <a href="/login" className="hover:text-blue-500">Login</a></div>
+          </form>
         </div>
-          <div className="flex justify-center capitalize pt-2 pb-2 font-semibold">Don't have an account? <a href="/login" className="hover:text-blue-500">Login</a></div>
-        </form>
       </div>
+      <Footer />
     </div>
   )
 }

@@ -52,7 +52,7 @@ function Navbar() {
             <div className='md:pl-60'>
               <div className='flex gap-4 md:relative mx-3'>
                 <h3 id='un' className='font-light text-sm md:text-xl pt-6 text-black'>{userEmail || 'Guest'}</h3>
-                <button id='p' className='h-20' onClick={handleProfileClick}>
+                <button id='p' className='md:h-20 h-16' onClick={handleProfileClick}>
                   <img
                     id='n'
                     alt='profile'
