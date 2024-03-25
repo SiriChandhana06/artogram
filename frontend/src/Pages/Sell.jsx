@@ -4,6 +4,7 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Navbar from '../components/Navbar';
 import SellPic from '../assets/sell.png';
+import Footer from '../components/Footer';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAJj9GuKhTUsaUrsQPma2w-297iVzcYsxM",
@@ -205,6 +206,7 @@ const Sell = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

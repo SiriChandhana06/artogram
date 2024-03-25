@@ -36,21 +36,22 @@ function Navbar() {
         setShowDropdown(false);
       })
       .catch((error) => {
+
         console.error('Error during logout:', error);
       });
   };
 
   return (
     <div className='bg-transparent top-0 z-50 fixed w-full backdrop-filter backdrop-blur-lg shadow-2xl bg-opacity-20'>
-      <div id='nav' className='flex'>
+      <div id='nav' className='md:flex flex justify-between'> 
         <div>
           <h1 className='pt-6 md:pl-20 px-5 font-bold text-2xl text-black'>Artogram</h1>
         </div>
-        <div className='pl-96'>
-          <div className='pl-96'>
-            <div className='pl-60'>
-              <div className='flex gap-4 relative'>
-                <h3 id='un' className='font-light text-xl pt-6 text-black'>{userEmail || 'Guest'}</h3>
+        <div className='md:pl-96'>
+          <div className='md:pl-96'>
+            <div className='md:pl-60'>
+              <div className='flex gap-4 md:relative mx-3'>
+                <h3 id='un' className='font-light text-sm md:text-xl pt-6 text-black'>{userEmail || 'Guest'}</h3>
                 <button id='p' className='h-20' onClick={handleProfileClick}>
                   <img
                     id='n'

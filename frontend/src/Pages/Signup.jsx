@@ -131,7 +131,7 @@ const disconnectWallet = async () => {
   };
 
   return (
-    <div id="signup" className='px-96 py-10 pt-24 bg-gray-300'>
+    <div id="signup" className='md:px-96 py-10 pt-24 bg-gray-300'>
       <div className='border-2 bg-blue-200 py-5 mx-36 rounded-3xl border-black shadow-lg shadow-black '>
         <h1 className="flex justify-center font-bold text-4xl pt-16">SIGNUP</h1>
         <form onSubmit={handleSignup}>

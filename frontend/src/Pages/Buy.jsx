@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Nav from '../components/Navbar';
 import Spinner from '../components/Spinner';
 import { useNavigate } from 'react-router-dom';
+import Footer from '../components/Footer';
 
 const Buy = () => { 
   const [products, setProducts] = useState([]);
@@ -34,12 +35,12 @@ const Buy = () => {
   return (
     <div className='bg-blue-300 pb-10'>
       <Nav />
-      <div className="pt-24  grid grid-cols-3">
+      <div className="pt-24 grid grid-cols-1 md:grid-cols-3">
         {loading ? ( 
           <Spinner />
         ) : (
           products.map(product => (
-            <div key={product._id} className='border-2 border-black transform transition-transform duration-300 hover:scale-105 hover:border-gray-600 rounded-3xl shadow-xl shadow-black m-10 h-5/7 w-96'>
+            <div key={product._id} className='border-2 border-black transform transition-transform duration-300 hover:scale-105 hover:border-gray-600 rounded-3xl shadow-xl shadow-black m-5 md:m-10 h-5/7 w-96'>
               <div className='w-full p-4 flex justify-center'>
                 <img className='h-60 w-80 rounded-xl' alt='card' src={product.imageUrl} />
               </div>
@@ -66,6 +67,7 @@ const Buy = () => {
           ))
         )}
       </div>
+      <Footer/>
     </div>
   );
 };
