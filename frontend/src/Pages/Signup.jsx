@@ -3,6 +3,8 @@ import { useState } from "react";
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "firebase/auth";
 import Footer from '../components/Footer';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Signup = () => {
   const [useremail, setUserEmail] = useState('');
@@ -46,6 +48,7 @@ const Signup = () => {
       setUser(result.user);
       setUserEmail(result.user.email);
       window.location.href = '/';
+      toast.success("Logged in Successfully");
       console.log(result);
     } catch (error) {
       console.error('Google authentication error:', error.message);
@@ -57,6 +60,7 @@ const Signup = () => {
       await signOut(auth);
       setUser(null);
       setUserEmail(null);
+      toast.error("Logged Out!")
     } catch (error) {
       console.error('Logout error:', error.message);
     }
@@ -66,6 +70,7 @@ const Signup = () => {
   const validation = () => {
     if (name === "") {
       setNameError("Name cannot be Empty");
+      toast.warning('Name cannot be Empty')
       return false;
     }
 
@@ -167,6 +172,16 @@ const Signup = () => {
               )}
             </div>
             <div className="flex justify-center capitalize pt-2 pb-2 font-semibold">Don't have an account? <a href="/login" className="hover:text-blue-500">Login</a></div>
+            <ToastContainer
+                    position="top-right"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    pauseOnHover
+                    theme="colored" />
           </form>
         </div>
       </div>

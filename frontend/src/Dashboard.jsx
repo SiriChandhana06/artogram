@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import { Link } from 'react-router-dom';
+import Footer from './components/Footer';
 
 const Dashboard = () => {
     const [myPosts, setMyPosts] = useState([]);
@@ -67,9 +68,10 @@ const Dashboard = () => {
     };
     
     return (
+        <div>
         <div className='bg-blue-300'>
             <h2 className='pt-24 font-semibold text-4xl text-center'>My Posts</h2>
-            <ul className=''>
+            <ul className='grid md:grid-cols-3 grid-cols-1'>
                 {myPosts.map(post => (
                     <li key={post._id} className='border-2 p-3 bg-blue-300 border-black transform transition-transform duration-300 hover:scale-105 hover:border-gray-600 rounded-3xl shadow-xl shadow-black m-10 h-5/7 w-96'>
                         <div className='w-full p-4 flex justify-center'>
@@ -88,6 +90,8 @@ const Dashboard = () => {
                     </li>
                 ))}
             </ul>
+        </div>
+        <Footer />
         </div>
     );
 };

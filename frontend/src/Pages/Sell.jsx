@@ -5,6 +5,9 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Navbar from '../components/Navbar';
 import SellPic from '../assets/sell.png';
 import Footer from '../components/Footer';
+import Spinner from '../components/Spinner';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAJj9GuKhTUsaUrsQPma2w-297iVzcYsxM",
@@ -29,6 +32,7 @@ const Sell = () => {
   const [price, setPrice] = useState('');
   const [description, setDescription] = useState('');
   const [userEmail, setUserEmail] = useState('');
+  const [spinner, setSpinner] = useState(false);
 
   useEffect(() => {
     const auth = getAuth();
@@ -45,9 +49,10 @@ const Sell = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setSpinner(true);
 
     if (!image) {
-      alert('Please select an image');
+      toast.error('Please select an image')
       return;
     }
 
@@ -75,7 +80,7 @@ const Sell = () => {
       });
 
       if (response.ok) {
-        alert('Product created successfully');
+        toast.success('Product created successfully');
         setProductName('');
         setProductType('');
         setImage(null);
@@ -85,11 +90,13 @@ const Sell = () => {
         setUPIId('');
         console.log("Image uploaded and data sent to backend successfully.");
       } else {
-        alert('Failed to create product');
+        toast.error('Failed to create product');
       }
     } catch (error) {
       console.error('Error creating product:', error);
-      alert('Error creating product');
+      toast.error('Error creating product');
+    } finally {
+      setSpinner(false);
     }
   };
 
@@ -105,6 +112,9 @@ const Sell = () => {
   return (
     <div className="bg-blue-300 font-serif">
       <Navbar />
+      <div className='relative'>
+
+      {spinner ? <Spinner />:null}
       <div className=' pt-28'>
         <h1 className='text-center font-semibold md:text-4xl text-xl md:py-4 py-3'>Sell Your worthable Products</h1>
       </div>
@@ -200,6 +210,15 @@ const Sell = () => {
                   <button type="submit" className='border-gray-500 border-2 rounded-lg bg-white px-10 py-2 hover:scale-105 hover:bg-blue-300 font-semibold hover:shadow-2xl mt-3'>
                     Submit
                   </button>
+                  <ToastContainer
+                    position="top-right"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    theme="colored" />
                 </div>
               </form>
             </div>
@@ -207,6 +226,7 @@ const Sell = () => {
         </div>
       </div>
       <Footer />
+                    </div>
     </div>
   );
 };
