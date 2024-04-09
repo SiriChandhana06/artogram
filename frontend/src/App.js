@@ -15,6 +15,7 @@ import Edit from './Pages/Edit';
 function App() {
   const [userEmail, setUserEmail] = useState('');
   const [loading, setLoading] = useState(true);
+  const isAuthenticated = localStorage.getItem('authenticated') === 'true';
 
   useEffect(() => {
     const auth = getAuth();
@@ -22,21 +23,22 @@ function App() {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUserEmail(user.email);
+        localStorage.setItem('authenticated', true);
       } else {
         setUserEmail('');
+        localStorage.removeItem('authenticated');
       }
       clearTimeout(timer);
       setLoading(false);
     });
 
     return () => {
-      clearTimeout(timer); // Clear the timer when the component unmounts
+      clearTimeout(timer);
       unsubscribe();
     };
   }, []);
 
   if (loading) {
-    // Show spinner while loading
     return <Spinner />;
   }
 
@@ -44,7 +46,10 @@ function App() {
     <Router>
       <Navbar />
       <Routes>
-        <Route path='/' element={userEmail ? <Home/> : <Signup/>} />
+        <Route
+          path='/'
+          element={<Home/>}
+        />
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<Signup />} />
         <Route path='/sell' element={<Sell />} />

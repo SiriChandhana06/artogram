@@ -57,35 +57,52 @@ app.get("/", async (req, res) => {
 app.post('/api/register', async (req, res) => {
   const { name, email, password } = req.body;
   try {
+    // Check if the user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: 'User already exists' });
+    }
+
+    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create a new user instance
     const newUser = new User({
       name,
       email,
       password: hashedPassword
     });
+
+    // Save the user to the database
     await newUser.save();
+
     res.status(201).json({ message: 'User registered successfully' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
   }
-})
+});
+
 
 app.post('/api/login', async (req, res) => {
-  const { email, password } = req.body;
+  const { name, password } = req.body;
 
   try {
-    const user = await User.findOne({ email });
+    // Find user by email
+    const user = await User.findOne({ name });
     if (!user) {
       console.log('User not found');
       return res.status(404).json({ message: 'User not found' });
     }
-    const isPasswordValid =  bcrypt.compare(password, user.password);
     
+    // Compare passwords
+    const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       console.log('Invalid password');
       return res.status(401).json({ message: 'Invalid password' });
     }
+
+    // Password is valid, user is authenticated
     console.log('Login successful');
     res.status(200).json({ message: 'Login successful' });
   } catch (error) {

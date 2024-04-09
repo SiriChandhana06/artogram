@@ -3,9 +3,10 @@ import { useNavigate } from 'react-router-dom';
 
 function Loginpage() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
   const [error, setError] = useState('');
+  const isAuthenticated = localStorage.getItem('authenticated') === 'true';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,15 +17,15 @@ function Loginpage() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ name, password })
       });
-      console.log(response);
-      
+
       if (response.ok) {  
         const data = await response.json();
-        console.log(data.message);
+        console.log(response);
         window.localStorage.setItem('authenticated', true);
-        navigate('/');
+        console.log(isAuthenticated)
+        isAuthenticated? window.location.href = '/' :navigate('/login');
       } else {
         setError('Authentication failed. Please check your credentials.');
       }
@@ -33,7 +34,6 @@ function Loginpage() {
       setError('Error logging in. Please try again.');
     }
   };
-
   return (
     <div id="loginpage" className="px-96 py-16 bg-gray-300 h-screen">
       <div className="border-2 bg-blue-200 py-5 mx-36 rounded-3xl border-black shadow-lg shadow-black">
@@ -43,9 +43,9 @@ function Loginpage() {
             <input
               className="border-2 border-black rounded-xl pl-4 h-10 w-96"
               type="text"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
             />
           </div>
           <div id="1password" className="flex justify-center pt-16">
