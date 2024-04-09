@@ -9,7 +9,7 @@ const port = 5000;
 const Razorpay = require('razorpay');
 const admin = require('firebase-admin');
 
-app.use(cors());
+app.use(cors('https://artogrampec.vercel.app/'));
 app.use(bodyParser.json());
 const dburi = process.env.dbURI;
 mongoose.connect(dburi, {
