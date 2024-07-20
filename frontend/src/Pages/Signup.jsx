@@ -18,6 +18,7 @@ const Signup = () => {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
+
   const firebaseConfig = {
     apiKey: "AIzaSyAJj9GuKhTUsaUrsQPma2w-297iVzcYsxM",
     authDomain: "artogram-7af74.firebaseapp.com",
@@ -27,7 +28,6 @@ const Signup = () => {
     appId: "1:408075607858:web:691180574cf2b506e6c12b",
     measurementId: "G-GB8DNH9J5Y"
   };
-
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
 
@@ -42,8 +42,9 @@ const Signup = () => {
   }, [auth, setUserEmail]);
 
   const connectWallet = async () => {
+    console.log('connected');
+    const provider = new GoogleAuthProvider();
     try {
-      const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
       setUser(result.user);
       setUserEmail(result.user.email);
@@ -51,7 +52,9 @@ const Signup = () => {
       toast.success("Logged in Successfully");
       console.log(result);
     } catch (error) {
-      console.error('Google authentication error:', error.message);
+      if (error instanceof Error) {
+        console.error("Error occurred during sign-in:", error.message);
+      }
     }
   };
 
