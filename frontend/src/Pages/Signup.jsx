@@ -42,7 +42,6 @@ const Signup = () => {
   }, [auth, setUserEmail]);
 
   const connectWallet = async () => {
-    console.log('connected');
     const provider = new GoogleAuthProvider();
     try {
       const result = await signInWithPopup(auth, provider);
