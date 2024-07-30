@@ -110,32 +110,32 @@ const Signup = () => {
     return isValid;
   };
 
-  // const handleSignup = async () => {
-  //   if (validation()) {
-  //     try {
-  //       const response = await fetch('https://artogram-backend.vercel.app/api/register', {
-  //         method: 'POST',
-  //         headers: {
-  //           'Content-Type': 'application/json'
-  //         },
-  //         body: JSON.stringify({ name, email, password })
-  //       });
+  const handleSignup = async () => {
+    if (validation()) {
+      try {
+        const response = await fetch('https://artogram-backend.vercel.app/api/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ name, email, password })
+        });
 
-  //       const data = await response.json();
+        const data = await response.json();
 
-  //       if (response.ok) {
-  //         toast.success('Signup successful! Please log in.');
-  //         window.localStorage.setItem('authenticated', true);
-  //         window.location.href = '/login';
-  //       } else {
-  //         toast.error('Signup failed: ' + data.message);
-  //       }
-  //     } catch (error) {
-  //       console.error('Error signing up:', error);
-  //       toast.error('Error signing up. Please try again.');
-  //     }
-  //   }
-  // };
+        if (response.ok) {
+          toast.success('Signup successful! Please log in.');
+          window.localStorage.setItem('authenticated', true);
+          window.location.href = '/login';
+        } else {
+          toast.error('Signup failed: ' + data.message);
+        }
+      } catch (error) {
+        console.error('Error signing up:', error);
+        toast.error('Error signing up. Please try again.');
+      }
+    }
+  };
 
   return (
     <div>
