@@ -113,7 +113,7 @@ const Signup = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('https://artogram-backend.vercel.app/api/register', {
+      const response = await fetch(' https://artogram-backend.vercel.app/api/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -138,12 +138,13 @@ const Signup = () => {
 
   return (
     <div>
-      <div id="signup" className='md:px-96 py-10 pt-24 bg-gray-300 h-screen'>
+
+      <div id="signup" className='md:px-96 py-10 pt-24 bg-gray-300'>
         <div className='border-2 bg-blue-200 py-5 mx-5 rounded-3xl border-black shadow-lg shadow-black '>
           <h1 className="flex justify-center font-bold text-xl md:text-4xl pt-16">SIGNUP</h1>
-          <form className="p-5">
+          <form onSubmit={handleSignup} className="p-5">
 
-            {/* <div className="flex justify-center pt-10">
+            <div className="flex justify-center pt-10">
               <input id="name" className="border-2 border-black rounded-xl pl-4 h-10 md:w-96 w-80" type="text" placeholder="Name" required onChange={(e) => setName(e.target.value)} />
             </div>
             <p className="text-red-800 flex justify-center">{nameError}</p>
@@ -162,7 +163,7 @@ const Signup = () => {
             <div className="flex justify-center pt-10 pb-2 ">
               <button type="button" className="bg-blue-500 hover:bg-blue-600 p-2 rounded-2xl" onClick={handleSubmit}>Signup</button>
             </div>
-            <hr className="border-1 mx-16 border-black" /> */}
+            <hr className="border-1 mx-16 border-black" />
             <div className='flex justify-center pt-4 pb-2'>
               {user ? (
                 <button className='bg-red-500 hover:bg-red-600 items-center text-black  p-2 font-semibold rounded-xl' onClick={disconnectWallet}>Logout</button>
