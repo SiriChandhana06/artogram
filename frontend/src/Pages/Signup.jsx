@@ -113,7 +113,7 @@ const Signup = () => {
   const handleSignup = async () => {
     if (validation()) {
       try {
-        const response = await fetch(' https://artogram-backend.vercel.app/api/register', {
+        const response = await fetch('https://artogram-backend.vercel.app/api/register', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

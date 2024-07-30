@@ -10,6 +10,26 @@ const Razorpay = require('razorpay');
 const admin = require('firebase-admin');
 
 app.use(cors('https://artogrampec.vercel.app/'));
+const allowedOrigins = [
+  'https://artogrampec.vercel.app/',
+  'http://localhost:3000'
+];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
+
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
 const dburi = process.env.dbURI;
 mongoose.connect(dburi, {
