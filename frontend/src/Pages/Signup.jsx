@@ -120,9 +120,8 @@ const Signup = () => {
           },
           body: JSON.stringify({ name, email, password })
         });
-
+        console.log(response);
         const data = await response.json();
-
         if (response.ok) {
           toast.success('Signup successful! Please log in.');
           window.localStorage.setItem('authenticated', true);
@@ -135,110 +134,110 @@ const Signup = () => {
         toast.error('Error signing up. Please try again.');
       }
     }
-  };
-
+  }
+  
   return (
     <div>
-      <div id="signup" className='md:px-96 py-10 pt-24 bg-gray-300'>
-        <div className='border-2 bg-blue-200 py-5 mx-5 rounded-3xl border-black shadow-lg shadow-black'>
-          <h1 className="flex justify-center font-bold text-xl md:text-4xl pt-16">SIGNUP</h1>
-          <form className="p-5">
-            <div className="flex justify-center pt-10">
-              <input
-                id="name"
-                className="border-2 border-black rounded-xl pl-4 h-10 md:w-96 w-80"
-                type="text"
-                placeholder="Name"
-                required
-                onChange={(e) => setName(e.target.value)}
+    <div id="signup" className='md:px-96 py-10 pt-24 bg-gray-300'>
+      <div className='border-2 bg-blue-200 py-5 mx-5 rounded-3xl border-black shadow-lg shadow-black'>
+        <h1 className="flex justify-center font-bold text-xl md:text-4xl pt-16">SIGNUP</h1>
+        <form className="p-5">
+          <div className="flex justify-center pt-10">
+            <input
+              id="name"
+              className="border-2 border-black rounded-xl pl-4 h-10 md:w-96 w-80"
+              type="text"
+              placeholder="Name"
+              required
+              onChange={(e) => setName(e.target.value)}
               />
-            </div>
-            <p className="text-red-800 flex justify-center">{nameError}</p>
-            <div className="flex justify-center pt-10">
-              <input
-                id="email"
-                className="border-2 border-black rounded-xl pl-4 h-10 md:w-96 w-80"
-                type="email"
-                placeholder="Email"
-                required
-                onChange={(e) => setEmail(e.target.value)}
+          </div>
+          <p className="text-red-800 flex justify-center">{nameError}</p>
+          <div className="flex justify-center pt-10">
+            <input
+              id="email"
+              className="border-2 border-black rounded-xl pl-4 h-10 md:w-96 w-80"
+              type="email"
+              placeholder="Email"
+              required
+              onChange={(e) => setEmail(e.target.value)}
               />
-            </div>
-            <p className="text-red-800 flex justify-center">{emailError}</p>
-            <div className="flex justify-center pt-10 ">
-              <input
-                id="password"
-                className="border-2 border-black rounded-xl pl-4 h-10 md:w-96 w-80"
-                type="password"
-                placeholder="Create Password"
-                required
-                onChange={(e) => setPassword(e.target.value)}
+          </div>
+          <p className="text-red-800 flex justify-center">{emailError}</p>
+          <div className="flex justify-center pt-10 ">
+            <input
+              id="password"
+              className="border-2 border-black rounded-xl pl-4 h-10 md:w-96 w-80"
+              type="password"
+              placeholder="Create Password"
+              required
+              onChange={(e) => setPassword(e.target.value)}
               />
-            </div>
-            <p className="text-red-800 flex justify-center">{passwordError}</p>
-            <div className="flex justify-center pt-10">
-              <input
-                id="confirmpassword"
-                className="border-2 border-black rounded-xl pl-4 h-10 md:w-96 w-80"
-                type="password"
-                placeholder="Confirm Password"
-                required
-                onChange={(e) => setConfirmPassword(e.target.value)}
+          </div>
+          <p className="text-red-800 flex justify-center">{passwordError}</p>
+          <div className="flex justify-center pt-10">
+            <input
+              id="confirmpassword"
+              className="border-2 border-black rounded-xl pl-4 h-10 md:w-96 w-80"
+              type="password"
+              placeholder="Confirm Password"
+              required
+              onChange={(e) => setConfirmPassword(e.target.value)}
               />
-            </div>
-            <p className="text-red-800 flex justify-center">{confirmPasswordError}</p>
-            <div className="flex justify-center pt-10 pb-2 ">
-              <button
-                type="button"
-                className="bg-blue-500 hover:bg-blue-600 p-2 rounded-2xl"
-                onClick={handleSignup}
+          </div>
+          <p className="text-red-800 flex justify-center">{confirmPasswordError}</p>
+          <div className="flex justify-center pt-10 pb-2 ">
+            <button
+              type="button"
+              className="bg-blue-500 hover:bg-blue-600 p-2 rounded-2xl"
+              onClick={handleSignup}
               >
-                Signup
+              Signup
+            </button>
+          </div>
+          <hr className="border-1 mx-16 border-black" />
+          <div className='flex justify-center pt-4 pb-2'>
+            {user ? (
+              <button
+              type="button"
+              className='bg-red-500 hover:bg-red-600 items-center text-black p-2 font-semibold rounded-xl'
+              onClick={disconnectWallet}
+              >
+                Logout
               </button>
-            </div>
-            <hr className="border-1 mx-16 border-black" />
-            <div className='flex justify-center pt-4 pb-2'>
-              {user ? (
-                <button
-                  type="button"
-                  className='bg-red-500 hover:bg-red-600 items-center text-black p-2 font-semibold rounded-xl'
-                  onClick={disconnectWallet}
-                >
-                  Logout
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  className='bg-red-500 hover:bg-red-600 items-center text-black p-2 font-semibold rounded-xl'
-                  onClick={connectWallet}
-                >
-                  Sign Up with Google
-                </button>
-              )}
-            </div>
-            <div className="flex justify-center capitalize pt-2 pb-2 font-semibold">
-              Already have an account? <a href="/login" className="hover:text-blue-500">Login</a>
-            </div>
-            <ToastContainer
-              position="top-right"
-              autoClose={5000}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-              theme="colored"
+            ) : (
+              <button
+              type="button"
+              className='bg-red-500 hover:bg-red-600 items-center text-black p-2 font-semibold rounded-xl'
+              onClick={connectWallet}
+              >
+                Sign Up with Google
+              </button>
+            )}
+          </div>
+          <div className="flex justify-center capitalize pt-2 pb-2 font-semibold">
+            Already have an account? <a href="/login" className="hover:text-blue-500">Login</a>
+          </div>
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="colored"
             />
-          </form>
-        </div>
-      </div>
-      <div>
-      <Footer />
+        </form>
       </div>
     </div>
-  );
-}
+    <div>
+      <Footer />
+    </div>
+  </div>
+);
+};
 
 export default Signup;

@@ -26,7 +26,7 @@ const Payment = () => {
 
     const generatePaymentLink = async (email) => {
         try {
-            const response = await fetch('http://localhost:5000/generate-payment-link', {
+            const response = await fetch('https://artogram-backend.vercel.app/generate-payment-link', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
